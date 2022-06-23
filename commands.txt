@@ -1,3 +1,6 @@
+circleci config validate
+
+
 docker build --tag proj_13 .
 docker run --publish 8000:8000 proj_13
 docker run --publish 8000:8000 -e DJANGO_SECRET_KEY -e DJANGO_DEBUG proj_13
@@ -5,3 +8,11 @@ docker run --publish 8000:8000 -e DJANGO_SECRET_KEY -e DJANGO_DEBUG -d proj_13
 
 docker tag proj_13:latest pr37docker/proj_13:latest
 docker push pr37docker/proj_13:latest
+
+docker run -d  --pull=always -e "PORT=8765" -e DJANGO_DEBUG -e DJANGO_SECRET_KEY -p 8007:8765 pr37docker/proj_13:latest 
+
+docker run --pull=always -e "PORT=8765" -e DJANGO_DEBUG -e DJANGO_SECRET_KEY -p 8007:8765 pr37docker/proj_13:latest 
+
+# This is with adding the local in CSRF_TRUSTED_ORIGINS and all the mod for heroku deployment
+docker run  -e "PORT=8765" -e DJANGO_DEBUG -e DJANGO_SECRET_KEY -p 8007:8765 proj_13
+

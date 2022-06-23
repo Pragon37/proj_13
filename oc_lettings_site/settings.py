@@ -13,7 +13,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", default="")
 # Use 0 for False and 1 for True
 DEBUG = bool(int(os.environ.get("DJANGO_DEBUG", default=0)))
 
-ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", "localhost", 'oc-lettings-37.herokuapp.com']
 
 
 # Application definition
@@ -117,3 +117,5 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CSRF_TRUSTED_ORIGINS = ["https://oc-lettings-37.herokuapp.com", "localhost:8007"]

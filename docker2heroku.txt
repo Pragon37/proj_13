@@ -1,0 +1,11 @@
+heroku container:login
+docker build -t registry.heroku.com/oc-lettings-37/web .
+docker push  registry.heroku.com/oc-lettings-37/web
+heroku container:release -a oc-lettings-37 web
+heroku open -a oc-lettings-37
+heroku run ls /app/staticfiles -a oc-lettings-37
+heroku run ls /app/staticfiles/admin -a oc-lettings-37
+heroku run ls /app/staticfiles/admin/css -a oc-lettings-37
+
+
+docker images --filter=reference='pr37docker/*:latest'  --format "{{.ID}}"
