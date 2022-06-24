@@ -1,6 +1,7 @@
 circleci config validate
 
 
+
 docker build --tag proj_13 .
 docker run --publish 8000:8000 proj_13
 docker run --publish 8000:8000 -e DJANGO_SECRET_KEY -e DJANGO_DEBUG proj_13

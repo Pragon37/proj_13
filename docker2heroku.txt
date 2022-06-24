@@ -9,3 +9,6 @@ heroku run ls /app/staticfiles/admin/css -a oc-lettings-37
 
 
 docker images --filter=reference='pr37docker/*:latest'  --format "{{.ID}}"
+
+
+heroku auth:token
