@@ -29,22 +29,29 @@ jobs:
         - run:
             name: Start container and push to Docker hub and to heroku
             command: | 
-              docker build -t $DOCKER_HUB_USER/proj_13:$CIRCLE_SHA1 .
+              docker build -t $DOCKER_HUB_USER/proj_13:$CIRCLE_SHA1 -t registry.heroku.com/$HEROKU_APP_NAME/web .
               echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USER --password-stdin
               docker push $DOCKER_HUB_USER/proj_13:$CIRCLE_SHA1
+              docker logout
+              echo $HEROKU_API_KEY | docker login -u $HEROKU_USERNAME --password-stdin registry.heroku.com
+              docker push registry.heroku.com/$HEROKU_APP_NAME/web
+              docker inspect registry.heroku.com/$HEROKU_APP_NAME/web --format={{.Id}} > WEB_DOCKER_IMAGE_ID_FILE
+        - persist_to_workspace:
+            root: .
+            paths:
+              - WEB_DOCKER_IMAGE_ID_FILE
   deploy-to-heroku:
       docker:
         - image: cimg/python:3.10.4
       steps:
         - checkout
         - setup_remote_docker
+        - attach_workspace:
+            at: /tmp
         - run:
             name: Login to heroku and release
-            command: |
-              docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
+            command: | 
               echo $HEROKU_API_KEY | docker login -u $HEROKU_USERNAME --password-stdin registry.heroku.com
-              docker push registry.heroku.com/$HEROKU_APP_NAME/web
-              docker inspect registry.heroku.com/$HEROKU_APP_NAME/web --format={{.Id}} > WEB_DOCKER_IMAGE_ID_FILE
               export WEB_DOCKER_IMAGE_ID=$(cat WEB_DOCKER_IMAGE_ID_FILE)
               curl -n -X PATCH https://api.heroku.com/apps/$HEROKU_APP_NAME/formation \
                   -d '{ "updates": [ { "type": "web", "docker_image": "'"$WEB_DOCKER_IMAGE_ID"'" }]}' \
