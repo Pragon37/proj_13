@@ -15,5 +15,6 @@ docker run -d  --pull=always -e "PORT=8765" -e DJANGO_DEBUG -e DJANGO_SECRET_KEY
 docker run --pull=always -e "PORT=8765" -e DJANGO_DEBUG -e DJANGO_SECRET_KEY -p 8007:8765 pr37docker/proj_13:latest 
 
 # This is with adding the local in CSRF_TRUSTED_ORIGINS and all the mod for heroku deployment
-docker run  -e "PORT=8765" -e DJANGO_DEBUG -e DJANGO_SECRET_KEY -p 8007:8765 proj_13
+docker run  -e "PORT=8765" -e DJANGO_DEBUG -e DJANGO_SECRET_KEY -p 8007:8765 pr37docker/proj_13
+
 
