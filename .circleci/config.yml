@@ -30,9 +30,10 @@ jobs:
             name: Start container and push to Docker hub and to heroku
             command: | 
               docker build -t $DOCKER_HUB_USER/proj_13:$CIRCLE_SHA1 -t registry.heroku.com/$HEROKU_APP_NAME/web \
-                -t $DOCKER_HUB_USER/proj_13:latest .
+                -t $DOCKER_HUB_USER/proj_13 .
               echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USER --password-stdin
               docker push $DOCKER_HUB_USER/proj_13:$CIRCLE_SHA1
+              docker push $DOCKER_HUB_USER/proj_13
               docker logout
               echo $HEROKU_API_KEY | docker login -u $HEROKU_USERNAME --password-stdin registry.heroku.com
               docker push registry.heroku.com/$HEROKU_APP_NAME/web
