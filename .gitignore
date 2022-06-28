@@ -4,3 +4,4 @@ venv
 .env
 test_reports/
 *.swp
+Ragon_Pierre*
