@@ -1,3 +1,6 @@
+pytest --nomigrations
+
+
 circleci config validate
 
 

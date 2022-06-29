@@ -38,8 +38,9 @@ https://app.circleci.com/pipelines/github/Pragon37
 
 heroku create oc-lettings-37
 
-heroku config:set SECRET_KEY='fp$9^593hsriajg$_%=5trot9g!1qa@ew(o-1#@=&4%=hp46(s' -a  oc-lettings-37
-Secret key is for the leats difficult to set from CLI.
+heroku config:set SECRET_KEY='fp$9"^"593hsriajg$_%=5trot9g!1qa@ew(o-1#@="&"4%=hp46(s' -a  oc-lettings-37
+Secret key is for the leats difficult to set from CLI.Need to enclose ^ and & with ""
 Use instead the GUI in appl settings.
 
+heroku apps:destroy
 

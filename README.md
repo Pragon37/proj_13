@@ -1,77 +1,117 @@
-## Résumé
+# Proj_13 :Web api Orange lettings County
 
-Site web d'Orange County Lettings
+[Project 13](https://github.com/Pragon37/proj_13)
 
-## Développement local
+This project is a refactored API, available as a docker container and deployed on heroku. 
 
-### Prérequis
+## Installing / Getting started
 
-- Compte GitHub avec accès en lecture à ce repository
-- Git CLI
-- SQLite3 CLI
-- Interpréteur Python, version 3.6 ou supérieure
+It is implemented as a DJANGO framework python program. To setup the environment you need to execute the following instructions:
 
-Dans le reste de la documentation sur le développement local, il est supposé que la commande `python` de votre OS shell exécute l'interpréteur Python ci-dessus (à moins qu'un environnement virtuel ne soit activé).
+```Windows Powershell
+python -m venv venv
+venv/Scripts/activate
+pip install -r requirements.txt
+python manage.py runserver
+To stop and quit the application: CTRL-BREAK.
 
-### macOS / Linux
+```
+Then you run the web application by loading :
+[Project 13] (http://localhost:8000/admin) if you are an administrator
+[Project 13] (http://localhost:8000/lettings) to see the available lettings
+[Project 13] (http://localhost:8000/profile) if see the customer profile
 
-#### Cloner le repository
+## Developing
 
-- `cd /path/to/put/project/in`
-- `git clone https://github.com/OpenClassrooms-Student-Center/Python-OC-Lettings-FR.git`
 
-#### Créer l'environnement virtuel
+``` Windows Powershell
+git clone https://github.com/Pragon37/proj_13
+cd proj_13/
+```
 
-- `cd /path/to/Python-OC-Lettings-FR`
-- `python -m venv venv`
-- `apt-get install python3-venv` (Si l'étape précédente comporte des erreurs avec un paquet non trouvé sur Ubuntu)
-- Activer l'environnement `source venv/bin/activate`
-- Confirmer que la commande `python` exécute l'interpréteur Python dans l'environnement virtuel
-`which python`
-- Confirmer que la version de l'interpréteur Python est la version 3.6 ou supérieure `python --version`
-- Confirmer que la commande `pip` exécute l'exécutable pip dans l'environnement virtuel, `which pip`
-- Pour désactiver l'environnement, `deactivate`
+## Running a docker container
+First setup the DJANGO_SECRET_KEY and DJANGO_DEBUG (if needed).
 
-#### Exécuter le site
+$Env:DJANGO_DEBUG = 0
+ 0 production mode / 1 debug mode
 
-- `cd /path/to/Python-OC-Lettings-FR`
-- `source venv/bin/activate`
-- `pip install --requirement requirements.txt`
-- `python manage.py runserver`
-- Aller sur `http://localhost:8000` dans un navigateur.
-- Confirmer que le site fonctionne et qu'il est possible de naviguer (vous devriez voir plusieurs profils et locations).
+$Env:DJANGO_SECRET_KEY = 'my_secret_key'
 
-#### Linting
+To check that it was successful or to display the current values:
 
-- `cd /path/to/Python-OC-Lettings-FR`
-- `source venv/bin/activate`
-- `flake8`
+$Env:DJANGO_DEBUG
+$Env:DJANGO_SECRET_KEY
 
-#### Tests unitaires
 
-- `cd /path/to/Python-OC-Lettings-FR`
-- `source venv/bin/activate`
-- `pytest`
+After having started Docker Desktop run the following command to execute the most recent release application:
 
-#### Base de données
+docker run --pull=always -e "PORT=8765" -e DJANGO_DEBUG -e DJANGO_SECRET_KEY -p 8007:8765 pr37docker/proj_13:latest 
 
-- `cd /path/to/Python-OC-Lettings-FR`
-- Ouvrir une session shell `sqlite3`
-- Se connecter à la base de données `.open oc-lettings-site.sqlite3`
-- Afficher les tables dans la base de données `.tables`
-- Afficher les colonnes dans le tableau des profils, `pragma table_info(Python-OC-Lettings-FR_profile);`
-- Lancer une requête sur la table des profils, `select user_id, favorite_city from
-  Python-OC-Lettings-FR_profile where favorite_city like 'B%';`
-- `.quit` pour quitter
+or in detached mode
 
-#### Panel d'administration
+docker run -d  --pull=always -e "PORT=8765" -e DJANGO_DEBUG -e DJANGO_SECRET_KEY -p 8007:8765 pr37docker/proj_13:latest 
 
-- Aller sur `http://localhost:8000/admin`
-- Connectez-vous avec l'utilisateur `admin`, mot de passe `Abc1234!`
+Set up you browser with address : 
+[oc lettings](http://localhost:8007)
+ 
+Admin login:
+-User : admin
+-Password: Abc1234!
 
-### Windows
+## Running Heroku
+The site is available online at :
+[oc-lettings](https://oc-lettings-37.herokuapp.com)
 
-Utilisation de PowerShell, comme ci-dessus sauf :
+## Creating a new release of the site
 
-- Pour activer l'environnement virtuel, `.\venv\Scripts\Activate.ps1` 
-- Remplacer `which <my-command>` par `(Get-Command <my-command>).Path`
+-Edit and save the necessary files:
+
+git add .
+git commit -m "What was fixed"
+git push
+
+This triggers the execution of a circleci pipeline that :
+-compiles, lints and tests the new code delivery
+-If it is successful it creates and pushes a docker container to docker hub and heroku. The container pushed in
+the heroku registry is then deployed.
+
+The heroku registry can be cleaned by deleting and recreating the application:
+heroku config
+display the current config with the required environment variable
+
+heroku apps:destroy oc-lettings-37
+heroku create oc-lettings-37
+heroku config:set DJANGO_SECRET_KEY='my_secret_key'
+
+caret (^) and ampersand(&) in  my_secret_key should be enclosed within "".
+
+
+## Links
+- Project homepage : [Project 13](https://github.com/Pragon37/proj_13)
+- Repository: https://github.com/Pragon37/proj_13.git
+
+## CI/CD
+Consists of 3 jobs:
+lint-and-test : to run lint and test on any branches that is pushed to the repository
+build-and-push : to build a docker image and push it to docker hub and heroku if there is a new successful push to the git master branch only
+deploy-to-heroku : deploy a new container that was pushed to heroku registry
+
+## Testing and monitoring
+The API is tested with the following command:
+
+pytest --nomigrations
+
+The API is monitored using the sentry API and the reference incident can be displayed at :
+[sentry-debug](https://sentry.io/share/issue/aa90816cdef1487e9ccde3a12d35dc15/)
+
+## Author
+
+Pierre : pragon37@outlook.fr
+
+##Credits
+[powershell env variables](https://docs.microsoft.com/fr-fr/powershell/module/microsoft.powershell.core/about/about_environment_variables?view=powershell-7.2)
+[deploying django to heroku with docker](https://testdriven.io/blog/deploying-django-to-heroku-with-docker/)
+[Very academy : How to Dockerize a django app](https://www.youtube.com/watch?v=W5Ov0H7E_o4)
+[very Academy : Sentry Django Integration - Error Reporting](https://www.youtube.com/watch?v=W5Ov0H7E_o4)
+[Continuous delivery for free using Docker, CircleCI and Heroku](https://www.codingnagger.com/2018/02/21/continuous-delivery/)
+[v2-project-13 discord](https://discord.com/channels/347061157351260161/766332882423250954/859219999625314365)
